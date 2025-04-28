@@ -25,7 +25,7 @@ public class Test {
         text = text.replace("AHAHA"," ");
         String arrSpaces [] = text.split(" ");
         Arrays.sort(arrSpaces,Comparator.comparingInt(String:: length));
-        System.out.println("Regex: " + arrSpaces[arrSpaces.length - 1].length() + " " + arrSpaces[arrSpaces.length - 1]);
+        System.out.println("Spaces: " + arrSpaces[arrSpaces.length - 1].length() + " " + arrSpaces[arrSpaces.length - 1]);
         //Для получения правильного ответа (2371) нужно добавить строку "AHAH" в начало и конец строки и
         //проанализировать строку аналитически.
     }

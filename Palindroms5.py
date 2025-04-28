@@ -1,6 +1,6 @@
 import re
 from itertools import count
-
+#https://education.yandex.ru/ege/task/105730a4-97f7-485b-a86a-76c11682aa85
 text = open("C:\\Users\\ASUS\\Downloads\\24 (6).txt").read().strip()
 palindroms = re.findall(r'(.)(.)(.)(\2)(\1)',text)
 palindroms1 = []

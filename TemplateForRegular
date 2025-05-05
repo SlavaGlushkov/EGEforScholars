@@ -1,0 +1,9 @@
+        List<String> list = new ArrayList<>();
+        String text = ***;
+        //Any regex
+        Matcher matcher = Pattern.compile(".+?(?=AHAHA|\b)").matcher(text);
+        while (matcher.find())
+            list.add(matcher.group());
+        list.sort(Comparator.comparingInt(String::length));
+        System.out.println(list.getLast().length());
+        System.out.println(list.getLast());

@@ -1,0 +1,92 @@
+package ExamSbor1;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
+
+public class ExamSbor1_26 {
+    static TreeSet<Meeting> meetings;
+    static TreeSet<MeetingRoom> freeMeetingRooms;
+    static TreeSet<MeetingRoom> busyMeetingRooms;
+    public static void main(String[] args) throws FileNotFoundException {
+        new ExamSbor1_26().enterData();
+        int counter = 0;
+        while (!meetings.isEmpty()){
+            //Переносим освободившиеся переговорные из занятых в свободные
+            while (!busyMeetingRooms.isEmpty() && meetings.getFirst().start > busyMeetingRooms.getFirst().busyTill){
+                freeMeetingRooms.add(busyMeetingRooms.pollFirst());
+            }
+            //Занимаем переговорную и переносим её из свободных в занятую
+            if (!freeMeetingRooms.isEmpty()){
+                freeMeetingRooms.getFirst().busyTill = meetings.pollFirst().end;
+                busyMeetingRooms.add(freeMeetingRooms.pollFirst());
+                counter++;
+            }
+            //Отклоняем бронирование
+            else{
+                meetings.pollFirst();
+            }
+        }
+        System.out.println("Обработано " + counter);
+        for (MeetingRoom i: busyMeetingRooms){
+            System.out.println(i.roomNumber + " " + i.busyTill);
+        }
+    }
+    void enterData() throws FileNotFoundException {
+        Scanner scanner = new Scanner(new FileReader("input.txt"));
+        scanner = new Scanner(new FileReader("C:\\Users\\User\\Downloads\\26 (11).txt"));
+        int numberOfRooms = scanner.nextInt();
+        int numberOfMeetings = scanner.nextInt();
+        meetings = new TreeSet<>((o1, o2) -> {
+            if (o1.start != o2.start)
+                return Integer.compare(o1.start, o2.start);
+            else if (o1.end != o2.end)
+                return Integer.compare(o1.end, o2.end);
+            else {
+                return Integer.compare(o1.id, o2.id);
+            }
+        });
+        freeMeetingRooms = new TreeSet<>(new Comparator<MeetingRoom>() {
+            @Override
+            public int compare(MeetingRoom o1, MeetingRoom o2) {
+                return Integer.compare(o1.roomNumber, o2.roomNumber);
+            }
+        });
+        busyMeetingRooms = new TreeSet<>(new Comparator<MeetingRoom>() {
+            @Override
+            public int compare(MeetingRoom o1, MeetingRoom o2) {
+                if (o1.busyTill != o2.busyTill)
+                    return Integer.compare(o1.busyTill,o2.busyTill);
+                else
+                    return Integer.compare(o1.roomNumber, o2.roomNumber);
+            }
+
+        });
+        for (int i = 1; i < numberOfRooms + 1; i++) {
+            freeMeetingRooms.add(new MeetingRoom(i,  0));
+        }
+        for (int i = 0; i < numberOfMeetings; i++) {
+            meetings.add(new Meeting(i, scanner.nextInt(), scanner.nextInt()));
+        }
+    }
+    static class Meeting{
+        int id;
+        int start;
+        int end;
+
+        public Meeting(int id, int start, int end) {
+            this.id = id;
+            this.start = start;
+            this.end = end;
+        }
+    }
+    static class MeetingRoom{
+        int roomNumber;
+        int busyTill;
+
+        public MeetingRoom(int roomNumber, int busyTill) {
+            this.roomNumber = roomNumber;
+            this.busyTill = busyTill;
+        }
+    }
+}
